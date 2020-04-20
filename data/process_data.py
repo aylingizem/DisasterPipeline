@@ -4,6 +4,16 @@ from sqlalchemy import create_engine
 
 
 def load_data(messages_filepath, categories_filepath):
+    """Load 2 different dataframes and join them together on their id's.
+
+    Args:
+    messages_filepath:  filepath for messages.csv
+    categories_filepath: filepath for categories.csv
+
+    Returns:
+    dataframe consist of messages.csv and categories.csv
+
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.join(categories.set_index('id'), on='id')
@@ -12,6 +22,16 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
+    """Cleaning process for the the dataframe
+
+    Args:
+    Dataframe
+
+    Returns:
+    Dataframe with categorical variables, and no duplications
+
+    """
+
     categories = df['categories'].str.split(';', expand=True)
     row = categories.iloc[0]
     category_colnames = row.values
@@ -32,8 +52,9 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+ #save the dataframe as db file
     engine = create_engine('sqlite:///' + database_filename)
-    df.to_sql('InsertTableName', engine, index=False)
+    df.to_sql('disaster', engine, index=False)
 
 
 def main():

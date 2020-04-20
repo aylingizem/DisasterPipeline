@@ -1,3 +1,4 @@
 data/disaster_categories.csv
 data/disaster_messages.csv
 data/DisasterResponse.db
+models/classifier.pkl
